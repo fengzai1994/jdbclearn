@@ -1,9 +1,13 @@
 package com.atguigi.advanced.pool;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.DruidDataSourceFactory;
 import org.junit.Test;
 
+import javax.sql.DataSource;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.util.Properties;
 
 public class DruidTest {
 
@@ -40,5 +44,20 @@ public class DruidTest {
         // 4. 回收鏈接
         connection.close();
 
+    }
+
+    @Test
+    public void testDruidSoft() throws Exception {
+        Properties properties = new Properties();
+
+        InputStream resourceAsStream = DruidTest.class.getClassLoader().getResourceAsStream("db.properties");
+        properties.load(resourceAsStream);
+
+        DataSource dataSource = DruidDataSourceFactory.createDataSource(properties);
+
+        Connection connection = dataSource.getConnection();
+        System.out.println(connection);
+
+        connection.close();
     }
 }
